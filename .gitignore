@@ -1,0 +1,7 @@
+# editors
+.idea
+
+# docker
+/root
+/sites
+/src/device.key
