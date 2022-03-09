@@ -15,7 +15,7 @@ if [ ! -f root/ca.pem ]; then
 fi
 
 # Create a new private key if one doesnt exist, or use the existing one if it does
-if [ -f device.key ]; then
+if [ -f src/device.key ]; then
     KEY_OPT="-key"
 else
     KEY_OPT="-keyout"
@@ -26,7 +26,7 @@ COMMON_NAME=${2:-*.$1}
 SUBJECT="/C=CA/ST=None/L=NB/O=None/CN=$COMMON_NAME"
 NUM_OF_DAYS=999
 openssl req -new -newkey rsa:2048 -sha256 -nodes $KEY_OPT src/device.key -subj "$SUBJECT" -out sites/device.csr
-cat config | sed s/%%DOMAIN%%/"$COMMON_NAME"/g > /tmp/__v3.ext
+cat src/config | sed s/%%DOMAIN%%/"$COMMON_NAME"/g > /tmp/__v3.ext
 openssl x509 -req -in sites/device.csr -CA root/ca.pem -CAkey root/ca.key -CAcreateserial -out sites/device.crt -days $NUM_OF_DAYS -sha256 -extfile /tmp/__v3.ext
 
 # move output files to final filenames
